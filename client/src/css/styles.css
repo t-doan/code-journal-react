@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .header {
   background-color: #562b81;
 }
@@ -49,6 +53,7 @@
   border: none;
   text-decoration: underline;
   color: red;
+  cursor: pointer;
 }
 
 .modal-container {

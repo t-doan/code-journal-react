@@ -2,9 +2,10 @@ import * as DataModel from './data';
 import { FaPencil } from 'react-icons/fa6';
 type ViewProps = {
   setView: (x: string) => void;
+  setCurrentEntryId: (n: number) => void;
 };
 
-export function ViewEntries({ setView }: ViewProps) {
+export function ViewEntries({ setView, setCurrentEntryId }: ViewProps) {
   return (
     <>
       <div className="container" data-view="entries">
@@ -16,7 +17,7 @@ export function ViewEntries({ setView }: ViewProps) {
             </h3>
           </div>
         </div>
-        <EntryList setView={setView} />
+        <EntryList setView={setView} setCurrentEntryId={setCurrentEntryId} />
       </div>
     </>
   );
@@ -24,14 +25,15 @@ export function ViewEntries({ setView }: ViewProps) {
 
 type EntryListProps = {
   setView: (x: string) => void;
+  setCurrentEntryId: (n: number) => void;
 };
-function EntryList({ setView }: EntryListProps) {
+function EntryList({ setView, setCurrentEntryId }: EntryListProps) {
   const entries = DataModel.readEntries();
   const temp = [];
 
   for (let i = 0; i < entries.length; i++) {
     temp.push(
-      <li data-entry-id={entries[i].entryId}>
+      <li key={entries[i].entryId} data-entry-id={entries[i].entryId}>
         <div className="row">
           <div className="column-half">
             <img
@@ -44,7 +46,11 @@ function EntryList({ setView }: EntryListProps) {
             <div className="row">
               <div className="column-full d-flex justify-between">
                 <h3>{entries[i].title}</h3>
-                <EditButton setView={setView} />
+                <EditButton
+                  setView={setView}
+                  entryId={entries[i].entryId}
+                  setCurrentEntryId={setCurrentEntryId}
+                />
               </div>
             </div>
             <p>{entries[i].notes}</p>
@@ -65,9 +71,16 @@ function EntryList({ setView }: EntryListProps) {
 }
 type EditProps = {
   setView: (x: string) => void;
+  entryId: number;
+  setCurrentEntryId: (n: number) => void;
 };
-function EditButton({ setView }: EditProps) {
-  return <FaPencil onClick={() => setView('editEntry')} />;
+function EditButton({ setView, entryId, setCurrentEntryId }: EditProps) {
+  function handleEdit() {
+    setView('editEntry');
+    setCurrentEntryId(entryId);
+  }
+
+  return <FaPencil onClick={handleEdit} />;
 }
 
 type NewProps = {

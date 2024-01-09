@@ -8,12 +8,22 @@ import './css/styles.css';
 
 function App() {
   const [view, setView] = useState('createEntry');
+  const [currentEntryId, setCurrentEntryId] = useState(0);
 
   return (
     <>
       <Header setView={setView} />
-      {view === 'viewEntries' && <ViewEntries setView={setView} />}
+      {view === 'viewEntries' && (
+        <ViewEntries setView={setView} setCurrentEntryId={setCurrentEntryId} />
+      )}
       {view === 'createEntry' && <EntriesForm view={view} setView={setView} />}
+      {view === 'editEntry' && (
+        <EntriesForm
+          view={view}
+          setView={setView}
+          currentEntryId={currentEntryId}
+        />
+      )}
     </>
   );
 }
